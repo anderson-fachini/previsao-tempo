@@ -1,0 +1,19 @@
+{
+  "name": "previsao-tempo",
+  "homepage": "https://github.com/anderson-fachini/previsao-tempo",
+  "authors": [
+    "Anderson Diego Kulpa Fachini <anderson.dkfachini@gmail.com>"
+  ],
+  "description": "Dashboard com a previsão do tempo",
+  "main": "index.html",
+  "moduleType": [],
+  "keywords": [
+    "previsão",
+    "tempo"
+  ],
+  "license": "Apache V2",
+  "dependencies": {
+    "AdminLTE": "admin-lte#~2.3.2",
+    "jquery": "~2.1.4"
+  }
+}
