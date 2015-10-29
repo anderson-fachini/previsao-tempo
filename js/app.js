@@ -89,6 +89,8 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	}
 
 	function getPrevisao(cidade, estado) {
+		$('.overlay').show();
+
 		$http
 		.get('http://developers.agenciaideias.com.br/tempo/json/' + cidade + '-' + estado)
 		.success(function (data) {
@@ -98,6 +100,8 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 			setMaximaMinima(previsoes);
 			setVariacaoTemperatura(previsoes);
 			geraGrafico(previsoes);
+
+			$('.overlay').hide();
 		})
 		.error(function (data) {
 
@@ -106,8 +110,8 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 
 	getPrevisao('Blumenau', 'SC');
 
-	$('#cidade').change(function() {
-		console.log( $(this).val() );
+	$('#cidade').change(function(e) {
+		getPrevisao($('#estado').val(), $(this).val());
 	});
 }]);
 
