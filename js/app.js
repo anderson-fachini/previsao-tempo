@@ -27,7 +27,7 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 
 		for (var i = 1; i < qtd; i++) {
 			temp = parseFloat(previsoes[i].temperatura_min);
-			if (temp > $scope.temperaturaPeriodo.minima.temperatura) {
+			if (temp < $scope.temperaturaPeriodo.minima.temperatura) {
 				$scope.temperaturaPeriodo.minima.temperatura = temp;
 				$scope.temperaturaPeriodo.minima.dia = previsoes[i].data;
 			}
@@ -76,8 +76,6 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 			scaleOverride: true,
 			responsive: true
 		};
-
-		console.log(options);
 
 		var len = previsoes.length;
 		for (var i = 0; i < len; i++) {
