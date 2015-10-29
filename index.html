@@ -9,16 +9,50 @@
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
 	<link rel="stylesheet" href="bower_components/AdminLTE/dist/css/AdminLTE.min.css" />
 </head>
-<body>
+<body ng-app="previsaoTempo" ng-controller="PrevisaoTempo as previsao">
 	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-		container principal
+		<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" ng-repeat="previsao in previsoes">
+			<div class="box box-solid box-default">
+				<div class="box-header"><h3>{{ previsao.data }}</h3></div>
+				<div class="box-body">
+					<img ng-src="{{previsao.imagem}}" />
+					<span>{{ previsao.temperatura_max }}º</span>
+					<span>{{ previsao.temperatura_min }}º</span>
+				</div>
+			</div>
+		</div>
 	</div>
-	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Coluna 1</div>
-	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Coluna 2</div>
-	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">Coluna 3</div>
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+		<div class="box box-solid box-default">
+			<div class="box-header"><h3>Próximos dias</h3></div>
+			<div class="box-body">
+				<span>Máxima: {{ temperaturaPeriodo.maxima.temperatura }}º {{ temperaturaPeriodo.maxima.dia }}</span><br />
+				<span>Mínima: {{ temperaturaPeriodo.minima.temperatura }}º {{ temperaturaPeriodo.minima.dia }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+		<div class="box box-solid box-default">
+			<div class="box-header"><h3>Recomendaçao de praia</h3></div>
+			<div class="box-body">
+				<span>{{ recomendacaoPraia }}</span>
+			</div>
+		</div>
+	</div>
+	<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+		<div class="box box-solid box-default">
+			<div class="box-header"><h3>Variação da temperatura</h3></div>
+			<div class="box-body">
+				<canvas id="grafico-variacao" width="300" height="150"></canvas>
+			</div>
+		</div>
+	</div>
 
 	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="bower_components/AdminLTE/dist/js/app.min.js"></script>
+	<script src="bower_components/angular/angular.min.js"></script>
+	<script src="bower_components/Chart.js/Chart.min.js"></script>
+	<script src="js/app.js"></script>
 </body>
 </html>
