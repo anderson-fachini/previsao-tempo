@@ -1,0 +1,12 @@
+.previsao-img {
+	display: block;
+	margin: 0px auto;
+}
+
+.previsao-min {
+	color: #0000FF;
+}
+
+.previsao-max {
+	color: #FF0000;
+}

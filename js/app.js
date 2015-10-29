@@ -90,8 +90,9 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		var myNewChart = new Chart(ctx).Line(data, options);
 	}
 
-	$http
-		.get('http://developers.agenciaideias.com.br/tempo/json/Blumenau-SC')
+	function getPrevisao(cidade, estado) {
+		$http
+		.get('http://developers.agenciaideias.com.br/tempo/json/' + cidade + '-' + estado)
 		.success(function (data) {
 			var previsoes = data.previsoes.slice(1);
 
@@ -103,4 +104,22 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		.error(function (data) {
 
 		});
+	}
+
+	getPrevisao('Blumenau', 'SC');
+
+	$('#cidade').change(function() {
+		console.log( $(this).val() );
+	});
 }]);
+
+$(document).ready(function() {
+	new dgCidadesEstados({
+        cidade: $('#cidade')[0],
+        estado: $('#estado')[0],
+        estadoVal: 'SC',
+        cidadeVal: 'Blumenau'
+    });
+
+	$('#estado, #cidade').select2();
+});
