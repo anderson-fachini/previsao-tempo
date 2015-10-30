@@ -9,6 +9,7 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	$scope.recomendacaoPraia = false;
 	$scope.variacaoTemperatura = [];
 	$scope.geolocation = 'geolocation' in navigator;
+	$scope.localFavorito = getLocalStorage().localFavorito;
 
 	$scope.localizeme = function() {
 		navigator.geolocation.getCurrentPosition(function(posicao) {
@@ -37,6 +38,19 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	    	showAlert('Atenção', 'Não foi possível obter a sua localização');
 	    	$('.overlay').hide();
 	    });
+	};
+
+	$scope.setLocalFavorito = function() {
+		var storage = {
+			cidade: $('#cidade').val(),
+			estado: $('#estado').val(),
+			previsoes: $scope.previsoes,
+			localFavorito: true
+		};
+
+		setLocalStorage(storage);
+
+		$scope.localFavorito = true;
 	};
 
 	function showAlert(title, message) {
@@ -166,7 +180,7 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		$('.overlay').hide();
 	}
 
-	function getPrevisao(cidade, estado) {
+	function getPrevisao(cidade, estado, salvaResultado) {
 		$('.overlay').show();
 
 		$http
@@ -176,11 +190,12 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 
 			geraInformacoes(previsoes);
 
-			setLocalStorage({
-				cidade: $('#cidade').val(),
-				estado: $('#estado').val(),
-				previsoes: previsoes
-			});
+			if (salvaResultado || $scope.localFavorito) {
+				var storage = getLocalStorage();
+				storage.previsoes = previsoes;
+
+				setLocalStorage(storage);
+			}
 		})
 		.error(function (data) {
 			showAlert('Atenção', 'Não foi possível obter a previsão');
@@ -197,7 +212,8 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 			storage = {
 				cidade: 'Blumenau',
 				estado: 'SC',
-				previsoes: []
+				previsoes: [],
+				localFavorito: false
 			};
 
 			setLocalStorage(storage);
@@ -226,12 +242,24 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	if (storage.previsoes.length) {
 		geraInformacoes(storage.previsoes);
 	} else {
-		getPrevisao('Blumenau', 'SC');
+		var salvaResultado = true;
+		getPrevisao('Blumenau', 'SC', salvaResultado);
 	}
 
 	setComboCidadeEstado(storage.cidade, storage.estado);
 
 	$('#cidade').change(function(e) {
-		getPrevisao($('#estado').val(), $(this).val());
+		var estado = $('#estado').val();
+		var cidade = $(this).val();
+
+		getPrevisao(estado, cidade);
+
+		var storage = getLocalStorage();
+
+		if (storage.cidade === cidade && storage.estado === estado) {
+			$scope.localFavorito = true;
+		} else {
+			$scope.localFavorito = false;
+		}
 	});
 }]);
