@@ -20,6 +20,9 @@
 		<div class="col-sm-12">
 			<form>
 				<div class="row">
+					<div class="form-group col-md-2" ng-show="geolocation">
+						<button class="form-control button-sm" ng-click="localizeme()"><span class="fa fa-globe"></span>Localize-me</button>
+					</div>
 					<div class="form-group col-sm-3">
 						<select class="form-control input-sm" name="estado" id="estado"></select>
 					</div>

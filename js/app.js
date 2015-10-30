@@ -8,6 +8,41 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	};
 	$scope.recomendacaoPraia = false;
 	$scope.variacaoTemperatura = [];
+	$scope.geolocation = 'geolocation' in navigator;
+
+	$scope.localizeme = function() {
+		console.log('okokok')
+		navigator.geolocation.getCurrentPosition(function(posicao) {
+			$('.overlay').show();
+
+	    	var latitude = posicao.coords.latitude;
+	    	var longitude = posicao.coords.longitude;
+
+	    	$http
+			.get('http://nominatim.openstreetmap.org/reverse?lat=' + latitude + '&lon=' + longitude)
+			.success(function (data) {
+				var xmlDoc = $.parseXML(data);
+				var cidade = $(xmlDoc).find('city').text();
+				var estado = $(xmlDoc).find('state').text();
+
+				estado = getEstadoByName(estado);
+			})
+			.error(function (data) {
+
+			});
+	    });
+	};
+
+	function getEstadoByName(name) {
+		var estados = $('#estado option');
+		var len = estados.length;
+
+		for (var i = 1; i < len; i++) {
+			if ( $(estados[i]).text() === name ) {
+				return $(estados[i]).val();
+			}
+		}
+	}
 
 	function setMaximaMinima(previsoes) {
 		$scope.temperaturaPeriodo.minima = parseFloat(previsoes[0].temperatura_min);
