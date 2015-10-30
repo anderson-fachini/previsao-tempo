@@ -14,12 +14,12 @@ body {
 
 .box.box-solid.box-default {
 	border-color: #4f8fa7;
-}
 
-.box.box-solid.box-default>.box-header {
-	background-color: #5da4c7;
-	color: #ffffff;
-	text-align: center;
+	&>.box-header {
+		background-color: #5da4c7;
+		color: #ffffff;
+		text-align: center;
+	}
 }
 
 .overlay {
@@ -65,19 +65,19 @@ body {
 }
 
 @media (max-width: 768px) {
-	.previsao-dia:not(:last-child) {
-		border-bottom: 3px solid #d2d6de;
-	}
-
 	.previsao-dia {
 		padding: 10px;
-	}
 
-	.previsao-dia:first-child {
-		padding-top: 0px;
-	}
+		&:not(:last-child) {
+			border-bottom: 3px solid #d2d6de;
+		}
 
-	.previsao-dia:last-child {
-		padding-bottom: 0px;
+		&:first-child {
+			padding-top: 0px;
+		}
+
+		&:last-child {
+			padding-bottom: 0px;
+		}
 	}
 }
