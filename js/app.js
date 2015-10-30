@@ -105,6 +105,16 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		}
 	}
 
+	function geraInformacoes(previsoes) {
+		$scope.previsoes = previsoes;
+		setMaximaMinima(previsoes);
+		setVariacaoTemperatura(previsoes);
+		setRecomendacaoPraia(previsoes);
+		geraGrafico(previsoes);
+
+		$('.overlay').hide();
+	}
+
 	function getPrevisao(cidade, estado) {
 		$('.overlay').show();
 
@@ -113,33 +123,59 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		.success(function (data) {
 			var previsoes = data.previsoes.slice(1);
 
-			$scope.previsoes = previsoes;
-			setMaximaMinima(previsoes);
-			setVariacaoTemperatura(previsoes);
-			setRecomendacaoPraia(previsoes);
-			geraGrafico(previsoes);
+			geraInformacoes(previsoes);
 
-			$('.overlay').hide();
+			setLocalStorage({
+				cidade: $('#cidade').val(),
+				estado: $('#estado').val(),
+				previsoes: previsoes
+			});
 		})
 		.error(function (data) {
 
 		});
 	}
 
-	getPrevisao('Blumenau', 'SC');
+	function getLocalStorage() {
+		var storage = localStorage.getItem('previsaoTempo');
+
+		if (storage) {
+			return JSON.parse(storage);
+		} else {
+			storage = {
+				cidade: 'Blumenau',
+				estado: 'SC',
+				previsoes: []
+			};
+
+			setLocalStorage(storage);
+
+			return storage;
+		}
+	}
+
+	function setLocalStorage(storage) {
+		localStorage.setItem('previsaoTempo', JSON.stringify(storage));
+	}
+
+	var storage = getLocalStorage();
+
+	if (storage.previsoes.length) {
+		geraInformacoes(storage.previsoes);
+	} else {
+		getPrevisao('Blumenau', 'SC');
+	}
+
+	new dgCidadesEstados({
+        cidade: $('#cidade')[0],
+        estado: $('#estado')[0],
+        estadoVal: storage.estado,
+        cidadeVal: storage.cidade
+    });
+
+	$('#estado, #cidade').select2();
 
 	$('#cidade').change(function(e) {
 		getPrevisao($('#estado').val(), $(this).val());
 	});
 }]);
-
-$(document).ready(function() {
-	new dgCidadesEstados({
-        cidade: $('#cidade')[0],
-        estado: $('#estado')[0],
-        estadoVal: 'SC',
-        cidadeVal: 'Blumenau'
-    });
-
-	$('#estado, #cidade').select2();
-});
