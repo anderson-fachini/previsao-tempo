@@ -9,7 +9,7 @@ Widgets com previsão do tempo dos próximos dias:
 - Bower: para gerenciar as dependências de frameworks/biblitoecas css/js
 - Sass: para gerar o css
 
-Execute os seguintes comandas na pasta raiz para gerar as dependências/css:
+Execute os seguintes comandos na pasta raiz para gerar as dependências/css:
 ```
 bower install
 sass css/app.scss css/app.css
