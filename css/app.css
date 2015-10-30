@@ -1,5 +1,33 @@
+body {
+	padding: 10px;
+}
+
+.container {
+	padding: 0px;
+	border-radius: 10px;
+	background-color: #cdf4ff;
+}
+
+#header {
+	color: #4f8fa7;
+}
+
+.box.box-solid.box-default {
+	border-color: #4f8fa7;
+}
+
+.box.box-solid.box-default>.box-header {
+	background-color: #5da4c7;
+	color: #ffffff;
+	text-align: center;
+}
+
 .overlay {
 	display: none;
+}
+
+.box-previsao {
+	padding: 0px;
 }
 
 .previsao-img {

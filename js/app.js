@@ -11,7 +11,6 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	$scope.geolocation = 'geolocation' in navigator;
 
 	$scope.localizeme = function() {
-		console.log('okokok')
 		navigator.geolocation.getCurrentPosition(function(posicao) {
 			$('.overlay').show();
 
@@ -26,12 +25,29 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 				var estado = $(xmlDoc).find('state').text();
 
 				estado = getEstadoByName(estado);
+
+				setComboCidadeEstado(cidade, estado);
+				getPrevisao(cidade, estado);
 			})
 			.error(function (data) {
-
+				showAlert('Atenção', 'Não foi possível determinar a sua localização');
+	    		$('.overlay').hide();
 			});
+	    }, function(error) {
+	    	showAlert('Atenção', 'Não foi possível obter a sua localização');
+	    	$('.overlay').hide();
 	    });
 	};
+
+	function showAlert(title, message) {
+		var html = '<div class="alert alert-warning alert-dismissible"> \
+		                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> \
+		                <h4><i class="icon fa fa-warning"></i> #TITLE</h4> \
+		                #MESSAGE \
+		            </div>';
+
+		$('#alert').append( html.replace('#TITLE', title).replace('#MESSAGE', message) );            
+	}
 
 	function getEstadoByName(name) {
 		var estados = $('#estado option');
@@ -167,7 +183,8 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 			});
 		})
 		.error(function (data) {
-
+			showAlert('Atenção', 'Não foi possível obter a previsão');
+	    	$('.overlay').hide();
 		});
 	}
 
@@ -193,6 +210,17 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		localStorage.setItem('previsaoTempo', JSON.stringify(storage));
 	}
 
+	function setComboCidadeEstado(cidade, estado) {
+		new dgCidadesEstados({
+	        cidade: $('#cidade')[0],
+	        estado: $('#estado')[0],
+	        estadoVal: estado,
+	        cidadeVal: cidade
+	    });
+
+	    $('#cidade, #estado').select2();
+	}
+
 	var storage = getLocalStorage();
 
 	if (storage.previsoes.length) {
@@ -201,14 +229,7 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		getPrevisao('Blumenau', 'SC');
 	}
 
-	new dgCidadesEstados({
-        cidade: $('#cidade')[0],
-        estado: $('#estado')[0],
-        estadoVal: storage.estado,
-        cidadeVal: storage.cidade
-    });
-
-	$('#estado, #cidade').select2();
+	setComboCidadeEstado(storage.cidade, storage.estado);
 
 	$('#cidade').change(function(e) {
 		getPrevisao($('#estado').val(), $(this).val());

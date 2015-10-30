@@ -6,7 +6,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<title>Previsão do tempo</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
 	<link rel="stylesheet" href="bower_components/AdminLTE/dist/css/AdminLTE.min.css" />
 	<link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.min.css" />
 	<link rel="stylesheet" href="bower_components/select2/dist/css/select2.min.css" />
@@ -14,82 +13,92 @@
 </head>
 <body ng-app="previsaoTempo" ng-controller="PrevisaoTempo as previsao">
 	<div class="container">
-		<div class="col-sm-12">
-			<h2>Previsão do tempo</h2>
-		</div>
-		<div class="col-sm-12">
-			<form>
-				<div class="row">
-					<div class="form-group col-md-2" ng-show="geolocation">
-						<button class="form-control button-sm" ng-click="localizeme()"><span class="fa fa-globe"></span>Localize-me</button>
+		<div class="col-sm-12" id="header">
+			<div class="col-sm-12">
+				<h1>Previsão do tempo</h1>
+				<p>Informe o estado e a cidade para consultar a previsão do tempo</p>
+			</div>
+			<div class="col-sm-12">
+				<form>
+					<div class="row">
+						<div class="form-group col-md-2" ng-show="geolocation">
+							<button class="form-control button-sm" ng-click="localizeme()"><span class="fa fa-globe"></span>Localize-me</button>
+						</div>
+						<div class="form-group col-sm-3">
+							<select class="form-control input-sm" name="estado" id="estado"></select>
+						</div>
+						<div class="form-group col-md-6">
+							<select class="form-control input-sm" name="cidade" id="cidade"></select>
+						</div>
 					</div>
-					<div class="form-group col-sm-3">
-						<select class="form-control input-sm" name="estado" id="estado"></select>
-					</div>
-					<div class="form-group col-md-6">
-						<select class="form-control input-sm" name="cidade" id="cidade"></select>
-					</div>
-				</div>
-			</form>
+				</form>
+
+				<div id="alert"></div>
+			</div>
 		</div>
 
 		<div class="col-sm-12">
-			<div class="col-sm-12">
-				<div class="box box-solid box-default text-center box-previsao">
+			<div class="col-sm-12 box-previsao">
+				<div class="col-sm-12">
+					<div class="box box-solid box-default text-center">
+						<div class="box-header"><h3>Próximos dias</h3></div>
+						<div class="box-body">
+							<div class="col-sm-3 previsao-dia" ng-repeat="previsao in previsoes">
+								<div><strong>{{ previsao.data }}</strong></div>
+								<div><img class="previsao-img" ng-src="{{previsao.imagem}}" /></div>
+								<div class="text-center"><strong>{{ previsao.descricao }}</strong></div>
+								<div class="previsao-max"><strong>{{ previsao.temperatura_max }}º</strong></div>
+								<div class="previsao-min"><strong>{{ previsao.temperatura_min }}º</strong></div>
+							</div>						
+						</div>
+						<div class="overlay">
+							<i class="fa fa-refresh fa-spin"></i>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-sm-4">
+				<div class="box box-solid box-default box-proximos-dias">
 					<div class="box-header"><h3>Próximos dias</h3></div>
-					<div class="box-body">
-						<div class="col-sm-3 previsao-dia" ng-repeat="previsao in previsoes">
-							<div><strong>{{ previsao.data }}</strong></div>
-							<div><img class="previsao-img" ng-src="{{previsao.imagem}}" /></div>
-							<div class="text-center"><strong>{{ previsao.descricao }}</strong></div>
-							<div class="previsao-max"><strong>{{ previsao.temperatura_max }}º</strong></div>
-							<div class="previsao-min"><strong>{{ previsao.temperatura_min }}º</strong></div>
-						</div>						
+					<div class="box-body text-center">
+						<div>Máxima: <span class="previsao-max">{{ temperaturaPeriodo.maxima }}º <span class="fa fa-arrow-up"></span></span></div>
+						<div>Mínima: <span class="previsao-min">{{ temperaturaPeriodo.minima }}º <span class="fa fa-arrow-down"></span></span></div>
 					</div>
 					<div class="overlay">
 						<i class="fa fa-refresh fa-spin"></i>
 					</div>
 				</div>
 			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="box box-solid box-default box-proximos-dias">
-				<div class="box-header"><h3>Próximos dias</h3></div>
-				<div class="box-body text-center">
-					<div>Máxima: <span class="previsao-max">{{ temperaturaPeriodo.maxima }}º <span class="fa fa-arrow-up"></span></span></div>
-					<div>Mínima: <span class="previsao-min">{{ temperaturaPeriodo.minima }}º <span class="fa fa-arrow-down"></span></span></div>
-				</div>
-				<div class="overlay">
-					<i class="fa fa-refresh fa-spin"></i>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="box box-solid box-default">
-				<div class="box-header"><h3>Recomendação de praia</h3></div>
-				<div class="box-body text-center">
-					<div ng-show="recomendacaoPraia">
-						<p class="fa fa-thumbs-o-up recomenda-icon"></p>
-						<p class="recomenda-msg">Praia recomendada neste final de semana</p>
+
+			<div class="col-sm-4">
+				<div class="box box-solid box-default">
+					<div class="box-header"><h3>Recomendação de praia</h3></div>
+					<div class="box-body text-center">
+						<div ng-show="recomendacaoPraia">
+							<p class="fa fa-thumbs-o-up recomenda-icon"></p>
+							<p class="recomenda-msg">Praia recomendada neste final de semana</p>
+						</div>
+						<div ng-show="!recomendacaoPraia">
+							<p class="fa fa-thumbs-o-down recomenda-icon"></p>
+							<p class="recomenda-msg">Praia não recomendada neste final de semana</p>
+						</div>
 					</div>
-					<div ng-show="!recomendacaoPraia">
-						<p class="fa fa-thumbs-o-down recomenda-icon"></p>
-						<p class="recomenda-msg">Praia não recomendada neste final de semana</p>
+					<div class="overlay">
+						<i class="fa fa-refresh fa-spin"></i>
 					</div>
 				</div>
-				<div class="overlay">
-					<i class="fa fa-refresh fa-spin"></i>
-				</div>
 			</div>
-		</div>
-		<div class="col-sm-4">
-			<div class="box box-solid box-default">
-				<div class="box-header"><h3>Variação da temperatura (ºC)</h3></div>
-				<div class="box-body">
-					<canvas id="grafico-variacao"></canvas>
-				</div>
-				<div class="overlay">
-					<i class="fa fa-refresh fa-spin"></i>
+
+			<div class="col-sm-4">
+				<div class="box box-solid box-default">
+					<div class="box-header"><h3>Variação da temperatura (ºC)</h3></div>
+					<div class="box-body">
+						<canvas id="grafico-variacao"></canvas>
+					</div>
+					<div class="overlay">
+						<i class="fa fa-refresh fa-spin"></i>
+					</div>
 				</div>
 			</div>
 		</div>
