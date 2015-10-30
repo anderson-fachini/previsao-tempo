@@ -3,8 +3,12 @@
 }
 
 .previsao-img {
-	display: block;
 	margin: 0px auto;
+}
+
+.previsao-min,
+.previsao-max {
+	font-size: 1.6em;
 }
 
 .previsao-min {
@@ -12,5 +16,40 @@
 }
 
 .previsao-max {
-	color: #FF0000;
+	color: #FF4400;
+}
+
+.box-proximos-dias .box-body {
+	font-size: 1.6em;
+}
+
+.recomenda-icon {
+	font-size: 5em;
+}
+
+.recomenda-msg {
+	font-size: 1.6em;
+}
+
+#grafico-variacao {
+	width: 350px;
+	height: 150px;
+}
+
+@media (max-width: 768px) {
+	.previsao-dia:not(:last-child) {
+		border-bottom: 3px solid #d2d6de;
+	}
+
+	.previsao-dia {
+		padding: 10px;
+	}
+
+	.previsao-dia:first-child {
+		padding-top: 0px;
+	}
+
+	.previsao-dia:last-child {
+		padding-bottom: 0px;
+	}
 }

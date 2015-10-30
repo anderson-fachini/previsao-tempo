@@ -4,7 +4,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<title>Document</title>
+	<title>Previsão do tempo</title>
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css" />
 	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap-theme.min.css" />
 	<link rel="stylesheet" href="bower_components/AdminLTE/dist/css/AdminLTE.min.css" />
@@ -31,14 +31,17 @@
 		</div>
 
 		<div class="col-sm-12">
-			<div class="col-sm-3" ng-repeat="previsao in previsoes">
-				<div class="box box-solid box-default text-center">
-					<div class="box-header"><h3>{{ previsao.data }}</h3></div>
+			<div class="col-sm-12">
+				<div class="box box-solid box-default text-center box-previsao">
+					<div class="box-header"><h3>Próximos dias</h3></div>
 					<div class="box-body">
-						<strong class="text-center">{{ previsao.descricao }}</strong>
-						<img class="previsao-img" ng-src="{{previsao.imagem}}" />					
-						<strong class="previsao-min">{{ previsao.temperatura_min }}º</strong>
-						<strong class="previsao-max">{{ previsao.temperatura_max }}º</strong>
+						<div class="col-sm-3 previsao-dia" ng-repeat="previsao in previsoes">
+							<div><strong>{{ previsao.data }}</strong></div>
+							<div><img class="previsao-img" ng-src="{{previsao.imagem}}" /></div>
+							<div class="text-center"><strong>{{ previsao.descricao }}</strong></div>
+							<div class="previsao-max"><strong>{{ previsao.temperatura_max }}º</strong></div>
+							<div class="previsao-min"><strong>{{ previsao.temperatura_min }}º</strong></div>
+						</div>						
 					</div>
 					<div class="overlay">
 						<i class="fa fa-refresh fa-spin"></i>
@@ -47,11 +50,11 @@
 			</div>
 		</div>
 		<div class="col-sm-4">
-			<div class="box box-solid box-default">
+			<div class="box box-solid box-default box-proximos-dias">
 				<div class="box-header"><h3>Próximos dias</h3></div>
-				<div class="box-body">
-					<span>Máxima: {{ temperaturaPeriodo.maxima.temperatura }}º {{ temperaturaPeriodo.maxima.dia }}</span><br />
-					<span>Mínima: {{ temperaturaPeriodo.minima.temperatura }}º {{ temperaturaPeriodo.minima.dia }}</span>
+				<div class="box-body text-center">
+					<div>Máxima: <span class="previsao-max">{{ temperaturaPeriodo.maxima }}º <span class="fa fa-arrow-up"></span></span></div>
+					<div>Mínima: <span class="previsao-min">{{ temperaturaPeriodo.minima }}º <span class="fa fa-arrow-down"></span></span></div>
 				</div>
 				<div class="overlay">
 					<i class="fa fa-refresh fa-spin"></i>
@@ -60,9 +63,16 @@
 		</div>
 		<div class="col-sm-4">
 			<div class="box box-solid box-default">
-				<div class="box-header"><h3>Recomendaçao de praia</h3></div>
-				<div class="box-body">
-					<span>{{ recomendacaoPraia }}</span>
+				<div class="box-header"><h3>Recomendação de praia</h3></div>
+				<div class="box-body text-center">
+					<div ng-show="recomendacaoPraia">
+						<p class="fa fa-thumbs-o-up recomenda-icon"></p>
+						<p class="recomenda-msg">Praia recomendada neste final de semana</p>
+					</div>
+					<div ng-show="!recomendacaoPraia">
+						<p class="fa fa-thumbs-o-down recomenda-icon"></p>
+						<p class="recomenda-msg">Praia não recomendada neste final de semana</p>
+					</div>
 				</div>
 				<div class="overlay">
 					<i class="fa fa-refresh fa-spin"></i>
@@ -73,7 +83,7 @@
 			<div class="box box-solid box-default">
 				<div class="box-header"><h3>Variação da temperatura (ºC)</h3></div>
 				<div class="box-body">
-					<canvas id="grafico-variacao" width="300" height="150"></canvas>
+					<canvas id="grafico-variacao"></canvas>
 				</div>
 				<div class="overlay">
 					<i class="fa fa-refresh fa-spin"></i>
