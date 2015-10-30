@@ -240,13 +240,20 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 	var storage = getLocalStorage();
 
 	if (storage.previsoes.length) {
-		geraInformacoes(storage.previsoes);
+		var dataPrimeiraPrevisao = storage.previsoes[0].data.split(' - ')[1];
+		var dataHoje = moment().add(1, 'days').format('DD/MM/YYYY');
+
+		if (dataPrimeiraPrevisao === dataHoje) {
+			geraInformacoes(storage.previsoes);	
+		} else {
+			getPrevisao(storage.cidade, storage.estado);
+		}		
 	} else {
 		var salvaResultado = true;
 		getPrevisao('Blumenau', 'SC', salvaResultado);
 	}
 
-	setComboCidadeEstado(storage.cidade, storage.estado);
+	setComboCidadeEstado(storage.cidade, storage.estado);	
 
 	$('#cidade').change(function(e) {
 		var estado = $('#estado').val();
