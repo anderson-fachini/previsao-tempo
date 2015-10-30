@@ -55,12 +55,30 @@ body {
 	font-size: 1.6em;
 }
 
-.recomenda-icon {
-	font-size: 5em;
-}
+.box-praia {
+	.box-body {
+		position: relative;
+	}
 
-.recomenda-msg {
-	font-size: 1.6em;
+	.img-praia {
+		width: 100%;
+	}
+
+	.mensagem-praia {
+		position: absolute;
+		width: 100%;
+		bottom: 6px;
+		font-size: 1.2em;
+		font-weight: bold;
+	}
+
+	.text-white {
+		color: #fff;
+	}
+
+	.text-black {
+		color: #000;
+	}
 }
 
 #grafico-variacao {

@@ -6,7 +6,11 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		maxima: 0,
 		minima: 0
 	};
-	$scope.recomendacaoPraia = false;
+	$scope.recomendacaoPraia = {
+		img: '',
+		menesagem: '',
+		recomenda: false
+	};
 	$scope.variacaoTemperatura = [];
 	$scope.geolocation = 'geolocation' in navigator;
 	$scope.localFavorito = getLocalStorage().localFavorito;
@@ -148,7 +152,7 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		var tempSab = 0, tempDom = 0;
 		var data, temp;
 
-		$scope.recomendacaoPraia = false;
+		var recomenda = false;
 
 		for (var i = 0; i < len; i++) {
 			data = previsoes[i].data.split(' - ')[0];
@@ -163,11 +167,17 @@ app.controller('PrevisaoTempo', ['$http', '$scope', function ($http, $scope) {
 		if ( tempSab > 0 || tempDom > 0 ) {
 			if ((tempSab > 25 && (tempDom === 0 || tempDom > 25)) ||
 				(tempDom > 25 && (tempSab === 0 || tempSab > 25)) ) {
-				$scope.recomendacaoPraia = true;
+				
+				recomenda = true;
 			}
 		} else if (parseFloat(previsoes[len-1].temperatura_max) > 25) {
-			$scope.recomendacaoPraia = true;
+			recomenda = true;
 		}
+
+
+		$scope.recomendacaoPraia.img = recomenda ? 'images/go-beach.jpg' : 'images/no-beach.jpg';
+		$scope.recomendacaoPraia.mensagem = recomenda ? 'Que tal uma praia neste final de semana?' : 'Este final de semana não vai dar praia';
+		$scope.recomendacaoPraia.recomenda = recomenda;
 	}
 
 	function geraInformacoes(previsoes) {

@@ -77,17 +77,11 @@
 			</div>
 
 			<div class="col-sm-4">
-				<div class="box box-solid box-default">
+				<div class="box box-solid box-default box-praia">
 					<div class="box-header"><h3>Recomendação de praia</h3></div>
 					<div class="box-body text-center">
-						<div ng-show="recomendacaoPraia">
-							<p class="fa fa-thumbs-o-up recomenda-icon"></p>
-							<p class="recomenda-msg">Praia recomendada neste final de semana</p>
-						</div>
-						<div ng-show="!recomendacaoPraia">
-							<p class="fa fa-thumbs-o-down recomenda-icon"></p>
-							<p class="recomenda-msg">Praia não recomendada neste final de semana</p>
-						</div>
+						<img ng-src="{{recomendacaoPraia.img}}" class="img-praia" />
+						<p class="mensagem-praia" ng-class="recomendacaoPraia.recomenda ? 'text-black' : 'text-white'">{{ recomendacaoPraia.mensagem }}</p>
 					</div>
 					<div class="overlay">
 						<i class="fa fa-refresh fa-spin"></i>
